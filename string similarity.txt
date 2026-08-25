@@ -1,0 +1,55 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.IOException;
+
+public class Solution {
+
+public static void main(String[] args) throws IOException {
+BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+String tLine = reader.readLine();
+if (tLine == null || tLine.trim().isEmpty()) {
+return;
+}
+
+int t = Integer.parseInt(tLine.trim());
+
+while (t-- > 0) {
+String s = reader.readLine().trim();
+System.out.println(calculateStringSimilarity(s));
+}
+}
+
+private static long calculateStringSimilarity(String s) {
+int n = s.length();
+int[] z = new int[n];
+
+// Z-array for full string (suffix starting at index 0 has similarity n)
+long totalSimilarity = n;
+
+// Maintain the rightmost Z-box [left, right]
+int left = 0;
+int right = 0;
+
+for (int i = 1; i < n; i++) {
+if (i <= right) {
+// Use previously computed Z-values within the current window
+z[i] = Math.min(right - i + 1, z[i - left]);
+}
+
+// Attempt to extend the match beyond the current Z-box
+while (i + z[i] < n && s.charAt(z[i]) == s.charAt(i + z[i])) {
+z[i]++;
+}
+
+// Update the rightmost Z-box window
+if (i + z[i] - 1 > right) {
+left = i;
+right = i + z[i] - 1;
+}
+
+totalSimilarity += z[i];
+}
+
+return totalSimilarity;
+}
+}
