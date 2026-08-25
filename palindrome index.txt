@@ -1,0 +1,58 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.IOException;
+
+public class Solution {
+
+public static int palindromeIndex(String s) {
+int left = 0;
+int right = s.length() - 1;
+
+while (left < right) {
+if (s.charAt(left) != s.charAt(right)) {
+// Try skipping the character at left pointer
+if (isPalindrome(s, left + 1, right)) {
+return left;
+}
+// Try skipping the character at right pointer
+if (isPalindrome(s, left, right - 1)) {
+return right;
+}
+// If neither creates a palindrome, no single removal can fix it
+return -1;
+}
+left++;
+right--;
+}
+
+// Already a palindrome
+return -1;
+}
+
+// Helper method to check if substring s[left...right] is a palindrome
+private static boolean isPalindrome(String s, int left, int right) {
+while (left < right) {
+if (s.charAt(left) != s.charAt(right)) {
+return false;
+}
+left++;
+right--;
+}
+return true;
+}
+
+public static void main(String[] args) throws IOException {
+BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+String qLine = reader.readLine();
+if (qLine == null || qLine.trim().isEmpty()) {
+return;
+}
+
+int q = Integer.parseInt(qLine.trim());
+
+while (q-- > 0) {
+String s = reader.readLine().trim();
+System.out.println(palindromeIndex(s));
+}
+}
+}
