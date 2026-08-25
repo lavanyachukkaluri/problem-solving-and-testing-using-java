@@ -1,0 +1,63 @@
+import java.io.*;
+import java.util.*;
+
+public class Solution {
+
+public static int[] maxSubarray(int[] arr) {
+int maxSubarray = arr[0];
+int currentSum = arr[0];
+
+int maxSubsequence = 0;
+int maxElement = arr[0];
+
+boolean hasPositive = false;
+
+for (int i = 0; i < arr.length; i++) {
+
+// Maximum subarray - Kadane's Algorithm
+if (i > 0) {
+currentSum = Math.max(arr[i], currentSum + arr[i]);
+maxSubarray = Math.max(maxSubarray, currentSum);
+}
+
+// Maximum subsequence
+if (arr[i] > 0) {
+maxSubsequence += arr[i];
+hasPositive = true;
+}
+
+// Largest element, used if all numbers are negative
+maxElement = Math.max(maxElement, arr[i]);
+}
+
+if (!hasPositive) {
+maxSubsequence = maxElement;
+}
+
+return new int[] { maxSubarray, maxSubsequence };
+}
+
+public static void main(String[] args) throws Exception {
+BufferedReader br =
+new BufferedReader(new InputStreamReader(System.in));
+
+int t = Integer.parseInt(br.readLine());
+
+while (t-- > 0) {
+int n = Integer.parseInt(br.readLine());
+
+int[] arr = new int[n];
+
+StringTokenizer st = new StringTokenizer(br.readLine());
+
+for (int i = 0; i < n; i++) {
+arr[i] = Integer.parseInt(st.nextToken());
+}
+
+int[] result = maxSubarray(arr);
+
+System.out.println(result[0] + " " + result[1]);
+}
+}
+}
+
