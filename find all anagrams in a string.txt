@@ -1,0 +1,50 @@
+import java.util.ArrayList;
+import java.util.List;
+
+public class Solution {
+public List<Integer> findAnagrams(String s, String p) {
+List<Integer> result = new ArrayList<>();
+
+int sLen = s.length();
+int pLen = p.length();
+
+// Edge case: if s is shorter than p, s cannot contain any anagrams of p
+if (sLen < pLen) {
+return result;
+}
+
+int[] pCount = new int[26];
+int[] sCount = new int[26];
+
+// Build initial frequency maps for 'p' and the first window in 's'
+for (int i = 0; i < pLen; i++) {
+pCount[p.charAt(i) - 'a']++;
+sCount[s.charAt(i) - 'a']++;
+}
+
+// Sliding window over 's'
+for (int i = 0; i <= sLen - pLen; i++) {
+// Compare character frequency counts
+if (matches(pCount, sCount)) {
+result.add(i);
+}
+
+// Slide window forward: remove leftmost character, add next rightmost character
+if (i < sLen - pLen) {
+sCount[s.charAt(i) - 'a']--; // Drop left char
+sCount[s.charAt(i + pLen) - 'a']++; // Add new right char
+}
+}
+
+return result;
+}
+
+private boolean matches(int[] a, int[] b) {
+for (int i = 0; i < 26; i++) {
+if (a[i] != b[i]) {
+return false;
+}
+}
+return true;
+}
+}
